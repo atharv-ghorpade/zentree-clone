@@ -1,11 +1,129 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Zap, Download, X } from 'lucide-react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function ZentreeLanding() {
+  const heroRef = useRef(null);
+  const aiSectionRef = useRef(null);
+  const searchSectionRef = useRef(null);
+  const floatingCardsRef = useRef([]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Hero section animation
+      gsap.fromTo(heroRef.current.children,
+        {
+          y: 60,
+          opacity: 0,
+          scale: 0.95
+        },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 1.2,
+          stagger: 0.2,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: heroRef.current,
+            start: "top 80%",
+            end: "bottom 20%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+
+      // AI section animations
+      gsap.fromTo(aiSectionRef.current.querySelector('.ai-content'),
+        {
+          x: -100,
+          opacity: 0
+        },
+        {
+          x: 0,
+          opacity: 1,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: aiSectionRef.current,
+            start: "top 70%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+
+      gsap.fromTo(aiSectionRef.current.querySelector('.ai-visual'),
+        {
+          x: 100,
+          opacity: 0,
+          rotation: 5
+        },
+        {
+          x: 0,
+          opacity: 1,
+          rotation: 0,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: aiSectionRef.current,
+            start: "top 70%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+
+      // Floating cards animation
+      floatingCardsRef.current.forEach((card, index) => {
+        if (card) {
+          gsap.fromTo(card,
+            {
+              y: 30,
+              opacity: 0,
+              rotation: "random(-10, 10)"
+            },
+            {
+              y: 0,
+              opacity: 1,
+              rotation: 0,
+              duration: 0.8,
+              delay: index * 0.1,
+              ease: "back.out(1.7)",
+              scrollTrigger: {
+                trigger: card,
+                start: "top 80%",
+                toggleActions: "play none none reverse"
+              }
+            }
+          );
+
+          // Parallax effect
+          gsap.fromTo(card,
+            { y: 0 },
+            {
+              y: -20,
+              scrollTrigger: {
+                trigger: card,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: 1
+              }
+            }
+          );
+        }
+      });
+
+    }, heroRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <div className="min-h-screen bg-white">
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-6 py-16 text-center">
+      <section ref={heroRef} className="max-w-7xl mx-auto px-6 py-16 text-center">
         <h1 className="text-6xl md:text-7xl font-bold text-gray-900 mb-4">
           Smarter Tools.<br />Better Workflow.
         </h1>
@@ -16,10 +134,10 @@ export default function ZentreeLanding() {
       </section>
 
       {/* AI Everything Section */}
-      <section className="max-w-5xl mx-auto px-6 py-16">
+      <section ref={aiSectionRef} className="max-w-5xl mx-auto px-6 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
           {/* Left Content */}
-          <div>
+          <div className="ai-content">
             <h2 className="text-5xl font-bold text-gray-900 mb-4">
               AI that work<br />
               <span className="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 bg-clip-text text-transparent">
@@ -34,10 +152,10 @@ export default function ZentreeLanding() {
           </div>
 
           {/* Right Visual */}
-          <div className="relative">
+          <div className="relative ai-visual">
             <div className="bg-gradient-to-br from-orange-50 to-pink-50 rounded-3xl p-8 shadow-xl relative overflow-hidden min-h-96">
               {/* Top Card */}
-              <div className="absolute top-8 left-8 bg-white rounded-xl shadow-lg p-4 w-48 transform -rotate-3">
+              <div ref={el => floatingCardsRef.current[0] = el} className="absolute top-8 left-8 bg-white rounded-xl shadow-lg p-4 w-48 transform -rotate-3">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="w-3 h-3 bg-pink-400 rounded"></div>
                   <div className="h-2 bg-pink-200 rounded flex-1"></div>
@@ -46,7 +164,7 @@ export default function ZentreeLanding() {
               </div>
 
               {/* Center Card with Logo */}
-              <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl p-6 w-72">
+              <div ref={el => floatingCardsRef.current[1] = el} className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-2xl shadow-2xl p-6 w-72">
                 <div className="flex flex-wrap gap-3 justify-center items-center mb-4">
                   <span className="text-pink-500 font-semibold text-sm">integration</span>
                   <span className="text-orange-500 font-semibold text-sm">build</span>
@@ -63,7 +181,7 @@ export default function ZentreeLanding() {
               </div>
 
               {/* Bottom Left Card */}
-              <div className="absolute bottom-12 left-12 bg-white rounded-xl shadow-lg p-3 w-40 transform rotate-2">
+              <div ref={el => floatingCardsRef.current[2] = el} className="absolute bottom-12 left-12 bg-white rounded-xl shadow-lg p-3 w-40 transform rotate-2">
                 <div className="flex items-center gap-2">
                   <div className="w-6 h-6 bg-purple-200 rounded flex items-center justify-center">
                     <div className="text-purple-600 text-xs">*</div>
@@ -73,7 +191,7 @@ export default function ZentreeLanding() {
               </div>
 
               {/* Bottom Right Card */}
-              <div className="absolute bottom-16 right-12 bg-white rounded-xl shadow-lg p-3 w-32">
+              <div ref={el => floatingCardsRef.current[3] = el} className="absolute bottom-16 right-12 bg-white rounded-xl shadow-lg p-3 w-32">
                 <div className="flex items-center gap-2">
                   <div className="w-5 h-5 bg-cyan-400 rounded-full"></div>
                   <div className="h-2 bg-cyan-200 rounded flex-1"></div>
@@ -81,7 +199,7 @@ export default function ZentreeLanding() {
               </div>
 
               {/* Top Right Indicator */}
-              <div className="absolute top-12 right-12 flex items-center gap-2">
+              <div ref={el => floatingCardsRef.current[4] = el} className="absolute top-12 right-12 flex items-center gap-2">
                 <div className="w-3 h-3 bg-purple-400 rounded-full"></div>
                 <div className="h-1 bg-gray-300 rounded w-16"></div>
               </div>
@@ -91,7 +209,7 @@ export default function ZentreeLanding() {
       </section>
 
       {/* Unified Search Section */}
-      <section className="max-w-5xl mx-auto px-6 py-16">
+      <section ref={searchSectionRef} className="max-w-5xl mx-auto px-6 py-16">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Visual */}
           <div className="relative order-2 lg:order-1">

@@ -1,6 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import { Zap, Check, Plus, X, ChevronRight, Star, Users } from 'lucide-react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 // Logo Item Component
 const LogoItem = ({ icon, name }) => (
@@ -13,40 +16,117 @@ const LogoItem = ({ icon, name }) => (
 export default function IntegrationDashboard() {
   const logoStripRef = useRef(null);
   const animationRef = useRef(null);
+  const dashboardRef = useRef(null);
+  const floatingIconsRef = useRef([]);
+  const headerRef = useRef(null);
+  const containerRef = useRef(null);
 
   useEffect(() => {
-    const logoStrip = logoStripRef.current;
-    if (!logoStrip) return;
+    const ctx = gsap.context(() => {
+      // Floating app icons animations
+      floatingIconsRef.current.forEach((icon, index) => {
+        if (icon) {
+          // Entry animation
+          gsap.fromTo(icon, 
+            {
+              scale: 0,
+              opacity: 0,
+              rotation: 180
+            },
+            {
+              scale: 1,
+              opacity: 1,
+              rotation: 0,
+              duration: 0.8,
+              delay: index * 0.1,
+              ease: "back.out(1.7)"
+            }
+          );
 
-    // Calculate the width of one set of logos
-    const firstSet = logoStrip.children[0];
-    const scrollWidth = firstSet.offsetWidth + 64; // 64px is the gap (gap-16 = 4rem = 64px)
+          // Continuous floating animation
+          gsap.fromTo(icon, 
+            {
+              y: 0,
+              x: 0,
+              rotation: 0
+            },
+            {
+              y: "random(-20, 20)",
+              x: "random(-10, 10)",
+              rotation: "random(-15, 15)",
+              duration: "random(3, 6)",
+              repeat: -1,
+              yoyo: true,
+              ease: "power2.inOut",
+              delay: index * 0.3,
+            }
+          );
+        }
+      });
 
-    // Create seamless infinite scroll
-    animationRef.current = gsap.to(logoStrip, {
-      x: -scrollWidth,
-      duration: 20,
-      ease: "none",
-      repeat: -1,
-    });
+      // Dashboard elements entry animation
+      const dashboardTl = gsap.timeline({ delay: 0.5 });
+      
+      dashboardTl.fromTo(dashboardRef.current, 
+        {
+          scale: 0.8,
+          opacity: 0
+        },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: 1,
+          ease: "power3.out"
+        }
+      );
 
-    return () => {
-      if (animationRef.current) {
-        animationRef.current.kill();
+      // Header animation
+      gsap.fromTo(headerRef.current, 
+        {
+          y: -50,
+          opacity: 0
+        },
+        {
+          y: 0,
+          opacity: 1,
+          duration: 1,
+          delay: 1,
+          ease: "power3.out"
+        }
+      );
+
+      // Logo strip continuous animation
+      if (logoStripRef.current) {
+        const logoWidth = logoStripRef.current.scrollWidth / 3;
+        
+        animationRef.current = gsap.fromTo(logoStripRef.current, 
+          {
+            x: 0
+          },
+          {
+            x: -logoWidth,
+            duration: 20,
+            ease: "none",
+            repeat: -1,
+          }
+        );
       }
-    };
+
+    }, containerRef);
+
+    return () => ctx.revert();
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-100 p-8 relative overflow-hidden">
+    <div ref={containerRef} className="min-h-screen bg-gradient-to-br from-pink-50 via-purple-50 to-blue-100 p-8 relative overflow-hidden pt-0">
       {/* Floating App Icons - Top Left */}
       <div className="absolute top-8 left-[22%] flex gap-4 z-40">
-        <div className="w-20 h-20 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg transform -rotate-12">
+        <div ref={el => floatingIconsRef.current[0] = el} className="w-20 h-20 bg-yellow-400 rounded-full flex items-center justify-center shadow-lg transform -rotate-12">
           <div className="w-12 h-12 bg-black rounded-full flex items-center justify-center">
             <div className="w-6 h-6 bg-yellow-400 rounded-full"></div>
           </div>
         </div>
-        <div className="w-20 h-20 bg-green-500 rounded-3xl flex items-center justify-center shadow-lg transform rotate-6">
+        <div ref={el => floatingIconsRef.current[1] = el} className="w-20 h-20 bg-green-500 rounded-3xl flex items-center justify-center shadow-lg transform rotate-6">
           <div className="grid grid-cols-2 gap-1">
             <div className="w-3 h-3 bg-white rounded-full"></div>
             <div className="w-3 h-3 bg-white rounded-full"></div>
@@ -58,32 +138,32 @@ export default function IntegrationDashboard() {
 
       {/* Floating App Icons - Left Side */}
       <div className="absolute left-[22%] top-1/3 flex flex-col gap-4 z-40">
-        <div className="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center shadow-lg">
+        <div ref={el => floatingIconsRef.current[2] = el} className="w-14 h-14 bg-blue-500 rounded-full flex items-center justify-center shadow-lg">
           <Zap className="w-6 h-6 text-white" fill="white" />
         </div>
-        <div className="w-14 h-14 bg-red-500 rounded-2xl flex items-center justify-center shadow-lg transform rotate-45">
+        <div ref={el => floatingIconsRef.current[3] = el} className="w-14 h-14 bg-red-500 rounded-2xl flex items-center justify-center shadow-lg transform rotate-45">
           <div className="w-6 h-6 bg-white rounded transform -rotate-45"></div>
         </div>
       </div>
 
       {/* Floating App Icons - Right Side */}
       <div className="absolute right-[22%] top-1/4 flex flex-col gap-6 z-50">
-        <div className="w-16 h-16 bg-cyan-400 rounded-2xl flex items-center justify-center shadow-lg transform rotate-12">
+        <div ref={el => floatingIconsRef.current[4] = el} className="w-16 h-16 bg-cyan-400 rounded-2xl flex items-center justify-center shadow-lg transform rotate-12">
           <div className="w-8 h-8 border-3 border-white rounded-lg"></div>
         </div>
-        <div className="w-20 h-20 bg-purple-600 rounded-full flex items-center justify-center shadow-lg">
+        <div ref={el => floatingIconsRef.current[5] = el} className="w-20 h-20 bg-purple-600 rounded-full flex items-center justify-center shadow-lg">
           <div className="text-white text-2xl">*</div>
         </div>
-        <div className="w-24 h-24 bg-black rounded-3xl flex items-center justify-center shadow-lg">
+        <div ref={el => floatingIconsRef.current[6] = el} className="w-24 h-24 bg-black rounded-3xl flex items-center justify-center shadow-lg">
           <Zap className="w-12 h-12 text-white" fill="white" />
         </div>
-        <div className="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center shadow-lg">
+        <div ref={el => floatingIconsRef.current[7] = el} className="w-16 h-16 bg-orange-500 rounded-full flex items-center justify-center shadow-lg">
           <div className="w-0 h-0 border-l-6 border-l-transparent border-r-6 border-r-transparent border-b-8 border-b-white"></div>
         </div>
       </div>
 
       {/* Main Dashboard Container */}
-      <div className="max-w-4xl mx-auto relative px-6 sm:px-8 lg:px-12">
+      <div ref={dashboardRef} className="max-w-4xl mx-auto relative px-6 sm:px-8 lg:px-12">
         {/* Back screen to give depth behind the dashboard */}
         <div className="-z-10 absolute inset-0 flex justify-center items-start pointer-events-none">
           <div className="w-full max-w-5xl h-[620px] bg-white/20 rounded-3xl transform scale-105 rotate-3 blur-md" />
@@ -291,15 +371,13 @@ export default function IntegrationDashboard() {
       </div>
 
       {/* Logo Strip Section */}
-      <div className="text-center mb-16 mt-16 px-4">
-        <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent mb-12">
+      <div className="text-center mb-16 mt-8 px-4">
+        <h1 ref={headerRef} className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-gray-800 to-gray-600 bg-clip-text text-transparent mb-12">
           Transforming Remote Working
         </h1>
         
         {/* Logo Strip with GSAP Animation */}
         <div className="relative overflow-hidden py-8 max-w-6xl mx-auto">
-          
-          {/* Scrolling container */}
           <div 
             ref={logoStripRef}
             className="flex items-center gap-16"

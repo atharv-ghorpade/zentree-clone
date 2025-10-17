@@ -19,71 +19,60 @@ export default function PricingSection() {
 
   const plans = [
     {
-      name: 'Free',
+      name: 'Basic',
       price: '$0',
       period: 'USD',
-      description: 'Free for up to 10 collaborators per Workspace',
-      subtitle: 'Perfect for small teams and personal projects.',
-      buttonText: 'Get Started Free',
+      description: '/ month',
+      billing: 'no transaction fee, it\'s free.',
+      billingBg: 'bg-green-100',
+      subtitle: 'Free Forever',
+      buttonText: 'Get Started',
       buttonStyle: 'border-2 border-blue-600 text-blue-600 hover:bg-blue-50',
       features: [
-        'Unlimited cards',
-        'Up to 10 boards per Workspace',
-        'Unlimited Power-Ups per board',
-        'Unlimited storage (10MB/file)',
-        '250 Workspace command runs',
-        'Custom backgrounds & stickers',
-        '2-factor authentication'
+        'Automated member invites',
+        'Unlimited free members',
+        'One-click disable/enable signups',
+        'Customizable invite page design',
+        'Custom description',
+        'Automated invites'
       ],
-      includedText: 'Included in Free:',
+      includedText: 'Included in Basic:',
       background: 'bg-white',
       border: 'border-gray-200'
     },
     {
       name: 'Premium',
-      price: '$10',
+      price: '$29',
       period: 'USD',
-      description: 'Per user/month',
-      billing: '+If billed annually ($12.50 billed annual)',
-      billingBg: 'bg-green-100',
-      subtitle: 'Add AI features, advanced views, and more control over your workspace.',
-      buttonText: 'Start 14 Day Free Trial',
+      description: '/ month',
+      billing: '+3.5% transaction fee',
+      billingBg: 'bg-blue-100',
+      subtitle: '14 days free trial',
+      buttonText: 'Get Started',
       buttonStyle: 'bg-blue-600 text-white hover:bg-blue-700',
       features: [
-        'Zentree Intelligence (AI)',
-        'Workspace views',
-        'Admin and security features',
-        'Workspace-level templates',
-        'Simple data export'
+        'All features included from basic',
+        'One-time & recurring billing options',
+        'Offer free trials & coupons',
+        'Multi-tiered level access',
+        'Paid & free access in the same community',
+        'Dashboard with activity feed',
+        'Automated email subscriber invoicing',
+        'Automated subscriber plan management',
+        'Embeddable sign–up widget',
+        'Auto kick or role removal (Discord) on cancel',
+        'Powerful affiliate integration',
+        'Track analytics and conversions',
+        '24/7 live chat support for your team & subscribers',
+        'Access to our Discord, Telegram & Slack configuration experts',
+        'Access to our customer success & growth teams'
       ],
-      includedText: 'Everything in Standard, plus:',
+      includedText: 'Everything in Premium:',
       background: 'bg-gradient-to-br from-blue-50 via-purple-50 to-orange-50',
       border: 'border-transparent',
       gradient: true,
       topBorder: 'bg-gradient-to-r from-blue-500 via-purple-500 to-orange-400',
       featured: true
-    },
-    {
-      name: 'Enterprise',
-      price: '$17.50',
-      period: 'USD',
-      description: 'Per user/month',
-      billing: 'If billed annually ($210.00 billed annual)',
-      billingBg: 'bg-green-100',
-      subtitle: 'Enterprise-grade security, 24/7 support, and admin controls for large teams.',
-      buttonText: 'Contact for Demo',
-      buttonStyle: 'border-2 border-gray-900 text-gray-900 hover:bg-gray-50',
-      features: [
-        'Unlimited Workspaces',
-        'Organization-visible boards',
-        'Public board management',
-        'Multi-board guests',
-        'Workspace-level templates',
-        'Power-Up administration'
-      ],
-      includedText: 'Everything in Premium, plus:',
-      background: 'bg-white',
-      border: 'border-gray-200'
     }
   ];
 
@@ -139,11 +128,14 @@ export default function PricingSection() {
         {/* Header */}
         <div ref={headerRef} className="text-center mb-12">
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-4">
-            Pick the Best Plan
+            Pick a Plan
           </h1>
           <p className="text-gray-600 text-lg">
-            We've got a plan to help you stay organized and on track.
+            Simple & honest pricing. If you need help deciding which plan is right for you, you can book a call with one of our experts.
           </p>
+          <button className="mt-4 text-blue-600 hover:text-blue-700 font-medium">
+            Book a free call to learn more
+          </button>
         </div>
 
         {/* Company Logos Strip */}
@@ -182,7 +174,7 @@ export default function PricingSection() {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-6 max-w-5xl mx-auto">
           {plans.map((plan, index) => (
             <div
               key={index}
@@ -215,7 +207,7 @@ export default function PricingSection() {
               {/* Featured badge */}
               {plan.featured && (
                 <div className="absolute top-6 right-6 bg-gradient-to-r from-blue-600 to-purple-600 text-white text-xs font-bold px-3 py-1 rounded-full">
-                  POPULAR
+                  Most popular
                 </div>
               )}
               

@@ -1,1 +1,38 @@
 /* Custom styles can be added here */
+
+/* Custom styles for ScrollTrigger animations */
+.scroll-trigger-element {
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Performance optimizations for animations */
+.gsap-animated {
+  will-change: transform, opacity;
+}
+
+/* Custom animation classes */
+.fade-up {
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.fade-left {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.fade-right {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.scale-in {
+  opacity: 0;
+  transform: scale(0.8);
+}

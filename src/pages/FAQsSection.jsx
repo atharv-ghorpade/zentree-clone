@@ -1,45 +1,111 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Plus, Minus } from 'lucide-react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function FAQsSection() {
   const [openIndex, setOpenIndex] = useState(null);
+  const containerRef = useRef(null);
+  const headerRef = useRef(null);
+  const faqItemsRef = useRef([]);
 
   const faqs = [
     {
-      question: 'Do I need a credit card to sign up?',
-      answer: 'No, you don\'t need a credit card to sign up for our free plan. You can start using our service immediately without any payment information. Credit card details are only required when you decide to upgrade to a paid plan.'
+      question: 'What is OneTapay?',
+      answer: 'OneTapay is a platform that makes it easy to charge for access to Discord, Telegram & Slack communities. We handle member management, billing, and invites so you can focus on creating great content for your community.'
     },
     {
-      question: 'Can I upgrade my plan later?',
-      answer: 'Yes, you can upgrade your plan at any time. Simply go to your account settings and choose the plan that best fits your needs. The upgrade will take effect immediately, and you\'ll be charged on a pro-rated basis for the remainder of your billing cycle.'
+      question: 'Is OneTapay secure?',
+      answer: 'Yes, OneTapay is extremely secure. All transactions are processed through Stripe, and we never store your payment information. We use industry-standard encryption and security practices to protect your data and your community members\' information.'
     },
     {
-      question: 'Is there a free trial for paid plans?',
-      answer: 'Yes, we offer a 14-day free trial for our Premium plan. During the trial period, you\'ll have access to all premium features without any charges. You can cancel anytime during the trial period without being charged.'
+      question: 'Is OneTapay free?',
+      answer: 'Yes, we offer a free Basic plan that includes automated member invites, unlimited free members, and customizable invite pages. Our Premium plan starts at $29/month with additional features and a 3.5% transaction fee.'
     },
     {
-      question: 'Do you offer discounts for teams or yearly billing?',
-      answer: 'Yes, we offer significant discounts for annual billing. When you choose to pay annually, you can save up to 20% compared to monthly billing. We also offer special pricing for teams and enterprise customers. Contact our sales team for more information.'
+      question: 'What kind of Communities Use OneTapay?',
+      answer: 'All types of paid chat communities thrive on OneTapay - from podcasts and content creators to finance & stock alerts, crypto & NFT groups, membership sites, resellers, and sport picks. We support any community that wants to monetize their Discord, Telegram, or Slack.'
     },
     {
-      question: 'Is my data secure?',
-      answer: 'Absolutely. We take data security very seriously. All data is encrypted in transit and at rest using industry-standard encryption protocols. We regularly conduct security audits and comply with major data protection regulations including GDPR and SOC 2.'
+      question: 'How Much Does OneTapay Cost?',
+      answer: 'Our Basic plan is free forever with no transaction fees. Our Premium plan is $29/month plus a 3.5% transaction fee, and includes a 14-day free trial. We also offer custom Enterprise pricing for larger organizations.'
     },
     {
-      question: 'Can I cancel anytime?',
-      answer: 'Yes, you can cancel your subscription at any time. There are no long-term contracts or cancellation fees. If you cancel, you\'ll continue to have access to your paid features until the end of your current billing period.'
+      question: 'How do you process membership fees?',
+      answer: 'We process all payments through Stripe, a trusted and secure payment processor. We support all major credit cards, Apple Pay, Google Pay, and a wide range of cryptocurrencies. Payments are processed instantly and securely.'
+    },
+    {
+      question: 'What if I want to change plans?',
+      answer: 'You can upgrade or downgrade your plan at any time through your dashboard. Changes take effect immediately, and we\'ll prorate any billing differences. There are no long-term contracts or cancellation fees.'
+    },
+    {
+      question: 'Can I charge a one-time fee instead of a recurring fee? What about free trials?',
+      answer: 'Yes! Our Premium plan supports both one-time and recurring billing options. You can also offer free trials and discount coupons to new members. You have full control over your pricing structure and can change it anytime.'
     }
   ];
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header animation
+      gsap.fromTo(headerRef.current,
+        {
+          y: -50,
+          opacity: 0,
+          scale: 0.9
+        },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: headerRef.current,
+            start: "top 80%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+
+      // FAQ items stagger animation
+      gsap.fromTo(faqItemsRef.current,
+        {
+          y: 50,
+          opacity: 0,
+          scale: 0.95
+        },
+        {
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          duration: 0.8,
+          stagger: 0.1,
+          ease: "power3.out",
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: "top 70%",
+            end: "bottom 30%",
+            toggleActions: "play none none reverse"
+          }
+        }
+      );
+
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
 
   const toggleFAQ = (index) => {
     setOpenIndex(openIndex === index ? null : index);
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-16 px-4">
+    <div ref={containerRef} className="min-h-screen bg-gray-50 py-16 px-4">
       <div className="max-w-3xl mx-auto">
         {/* Header */}
-        <h1 className="text-5xl font-bold text-gray-900 text-center mb-12">
+        <h1 ref={headerRef} className="text-5xl font-bold text-gray-900 text-center mb-12">
           FAQs
         </h1>
 
@@ -48,6 +114,7 @@ export default function FAQsSection() {
           {faqs.map((faq, index) => (
             <div
               key={index}
+              ref={el => faqItemsRef.current[index] = el}
               className="bg-white rounded-lg border border-gray-200 overflow-hidden transition-all duration-200"
             >
               {/* Question Button */}

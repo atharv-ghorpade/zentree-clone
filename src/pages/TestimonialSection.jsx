@@ -1,6 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function TestimonialSection() {
   const [activeSlide, setActiveSlide] = useState(0);
@@ -8,98 +11,133 @@ export default function TestimonialSection() {
   const headerRef = useRef(null);
   const statsRef = useRef(null);
   const cardsRef = useRef([]);
+  const containerRef = useRef(null);
 
   const testimonials = [
     {
-      company: 'stari',
-      logo: '⭐',
+      company: 'Imperial',
+      logo: '🏛️',
       rating: 5,
-      quote: '"The platform lets us manage projects exactly the way we want. It adapts perfectly to our workflow."',
-      author: 'Emily King',
-      role: 'Operations Lead at Stari',
-      avatar: '👩'
+      source: 'Trustpilot',
+      quote: '"I love OneTapay!! OneTapay manages everything perfectly and flawlessly. If you run any type of business with recurring subs and have dealt with the frustration of removing and adding members yourself, you need OneTapay ASAP. My business grew exponentially after teaming up with them, absolutely love OneTapay and their team!"',
+      author: 'Brandon',
+      role: 'Imperial',
+      avatar: '�'
     },
     {
-      company: 'circle',
-      logo: '⭕',
+      company: 'Blueville Capital',
+      logo: '🏢',
       rating: 5,
-      quote: '"The platform lets us manage projects exactly the way we want. It adapts perfectly to our workflow."',
-      author: 'Joshua Davis',
-      role: 'Head of Product Development at Circle',
-      avatar: '👨'
-    },
-    {
-      company: 'velocity',
-      logo: '⚡',
-      rating: 5,
-      quote: '"We\'ve been able to stay on top of every project without missing a beat. The workflow tools are a game-changer."',
-      author: 'Chris Walker',
-      role: 'Product Manager at Velocity',
+      source: 'Trustpilot',
+      quote: '"The support team here is amazing! OneTapay has helped streamline my business & allowed me to focus on creating content for my subscribers. I\'m able to create multiple channels for the various subscription packages I offer with ease. The support team here is amazing! They\'re always available & respond to any query within minutes."',
+      author: 'Richard',
+      role: 'Blueville Capital LLC',
       avatar: '👨‍💼'
     },
     {
-      company: 'goldline',
-      logo: '🏆',
+      company: 'Convert.ai',
+      logo: '🤖',
       rating: 5,
-      quote: '"No more juggling between different tools. Now everything\'s in one place — from task assignments to real-time updates."',
-      author: 'Michael Parker',
-      role: 'Project Director at Goldline',
-      avatar: '👔'
+      source: 'ProductHunt',
+      quote: '"OneTapay helped us build and commercialize a 500+ community within a few days. Behind their powerful product is an amazing team that gave us the insights we needed to keep growing."',
+      author: 'Chris',
+      role: 'Convert.ai',
+      avatar: '👨‍�'
     },
     {
-      company: 'treva',
-      logo: '🎯',
+      company: 'Money Heist',
+      logo: '💰',
       rating: 5,
-      quote: '"What used to take us hours to organize now takes just minutes. We\'re more efficient than ever."',
-      author: 'Sara Lee',
-      role: 'Marketing Coordinator at Treva',
-      avatar: '👩‍💼'
+      source: 'Trustpilot',
+      quote: '"A simple yet powerful way to monetize your chat group, automate payments and manage members. Amazing customer support as well!"',
+      author: 'Moe',
+      role: 'Moneyheist',
+      avatar: '�‍🎭'
+    },
+    {
+      company: 'Origin Trading',
+      logo: '📈',
+      rating: 5,
+      source: 'Trustpilot',
+      quote: '"Using OneTapay to monetize and manage the discord community has made my job easy! Setup and configuration are simplified to a few clicks of your mouse and a couple of lines of text. If you\'re looking for the best solution to manage your Discord or Slack server, then look no further, you found it with OneTapay!"',
+      author: 'Ryan',
+      role: 'Origin Trading',
+      avatar: '�‍💼'
     }
   ];
 
   const totalSlides = 5;
 
-  // Initial animations on mount
+  // Initial animations on mount with ScrollTrigger
   useEffect(() => {
     const ctx = gsap.context(() => {
-      // Animate header
+      // Header animation with ScrollTrigger
       gsap.from(headerRef.current, {
+        y: -50,
+        opacity: 0,
+        duration: 1,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 80%",
+          toggleActions: "play none none reverse"
+        }
+      });
+
+      // Stats animation with ScrollTrigger
+      gsap.from(statsRef.current.children, {
         y: -30,
         opacity: 0,
         duration: 0.8,
-        ease: "power3.out"
-      });
-
-      // Animate stats
-      gsap.from(statsRef.current.children, {
-        y: -20,
-        opacity: 0,
-        duration: 0.6,
-        stagger: 0.2,
+        stagger: 0.3,
         ease: "power2.out",
-        delay: 0.3
+        scrollTrigger: {
+          trigger: statsRef.current,
+          start: "top 80%",
+          toggleActions: "play none none reverse"
+        }
       });
 
-      // Animate cards
+      // Cards entrance animation
       gsap.from(cardsRef.current, {
-        y: 50,
+        y: 80,
         opacity: 0,
-        duration: 0.8,
+        duration: 1,
         stagger: 0.15,
         ease: "power3.out",
-        delay: 0.5
+        scrollTrigger: {
+          trigger: carouselRef.current,
+          start: "top 80%",
+          toggleActions: "play none none reverse"
+        }
       });
-    });
+
+      // Parallax effect for testimonial cards
+      cardsRef.current.forEach((card) => {
+        if (card) {
+          gsap.to(card, {
+            y: -20,
+            scrollTrigger: {
+              trigger: card,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1
+            }
+          });
+        }
+      });
+
+    }, containerRef);
 
     return () => ctx.revert();
   }, []);
 
-  // Smooth slide transition
+  // Smooth slide transition with enhanced easing
   useEffect(() => {
     if (carouselRef.current) {
       gsap.to(carouselRef.current, {
         x: -activeSlide * (window.innerWidth * 0.3),
-        duration: 0.8,
+        duration: 1,
         ease: "power2.inOut"
       });
     }
@@ -112,24 +150,24 @@ export default function TestimonialSection() {
   };
 
   return (
-    <div className="bg-gray-50 py-20 px-4 overflow-hidden">
+    <div ref={containerRef} className="bg-gray-50 py-20 px-4 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
         <div className="flex justify-between items-start mb-16 gap-8">
           <div ref={headerRef} className="text-left">
             <h2 className="text-5xl font-bold text-gray-900 mb-4 leading-tight">
-              Trusted by Teams<br />Around the World
+              See why our users<br />❤️ OneTapay 🚀
             </h2>
             <p className="mt-4 text-gray-600 text-lg">
-              Join thousands of users who've<br />streamlined their workflow with fast setup.
+              Join thousands of creators who've<br />monetized their communities with OneTapay.
             </p>
           </div>
           
           {/* Stats */}
           <div ref={statsRef} className="flex gap-16 items-start">
             <div className="text-center">
-              <div className="text-4xl font-bold text-gray-900 mb-2">10m+</div>
-              <div className="text-sm text-gray-600 mb-2">Installations</div>
+              <div className="text-4xl font-bold text-gray-900 mb-2">1M+</div>
+              <div className="text-sm text-gray-600 mb-2">Community Members</div>
               <div className="flex gap-1 justify-center">
                 {[...Array(5)].map((_, i) => (
                   <svg key={i} className="w-4 h-4 fill-blue-600" viewBox="0 0 20 20">
@@ -141,10 +179,10 @@ export default function TestimonialSection() {
             
             <div className="text-center">
               <div className="text-4xl font-bold text-gray-900 mb-2">4.9/5</div>
-              <div className="text-sm text-gray-600 mb-2">App Rating</div>
+              <div className="text-sm text-gray-600 mb-2">Trustpilot Rating</div>
               <div className="flex gap-1 justify-center">
                 {[...Array(5)].map((_, i) => (
-                  <svg key={i} className="w-4 h-4 fill-blue-600" viewBox="0 0 20 20">
+                  <svg key={i} className="w-4 h-4 fill-green-600" viewBox="0 0 20 20">
                     <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
                   </svg>
                 ))}
@@ -194,12 +232,15 @@ export default function TestimonialSection() {
                         </div>
                         <span className="font-semibold text-gray-900">{testimonial.company}</span>
                       </div>
-                      <div className="flex gap-0.5">
-                        {[...Array(5)].map((_, i) => (
-                          <svg key={i} className="w-3 h-3 fill-green-600" viewBox="0 0 20 20">
-                            <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
-                          </svg>
-                        ))}
+                      <div className="flex items-center gap-2">
+                        <div className="flex gap-0.5">
+                          {[...Array(5)].map((_, i) => (
+                            <svg key={i} className="w-3 h-3 fill-green-600" viewBox="0 0 20 20">
+                              <path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z" />
+                            </svg>
+                          ))}
+                        </div>
+                        <span className="text-xs text-gray-500">from {testimonial.source}</span>
                       </div>
                     </div>
 

@@ -1,12 +1,101 @@
-import React from 'react';
+import React, { useRef, useEffect } from 'react';
 import { Play, Zap } from 'lucide-react';
+import { gsap } from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function WorkflowHero() {
+  const containerRef = useRef(null);
+  const headerRef = useRef(null);
+  const cardsRef = useRef([]);
+  const floatingIconsRef = useRef([]);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // Header animation
+      gsap.from(headerRef.current.children, {
+        y: 50,
+        opacity: 0,
+        duration: 1,
+        stagger: 0.2,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: headerRef.current,
+          start: "top 80%",
+          toggleActions: "play none none reverse"
+        }
+      });
+
+      // Cards entrance animation
+      gsap.from(cardsRef.current, {
+        y: 100,
+        opacity: 0,
+        rotation: 5,
+        duration: 1.2,
+        stagger: 0.3,
+        ease: "power3.out",
+        scrollTrigger: {
+          trigger: containerRef.current,
+          start: "top 70%",
+          toggleActions: "play none none reverse"
+        }
+      });
+
+      // Floating icons animation in the dark card
+      floatingIconsRef.current.forEach((icon, index) => {
+        if (icon) {
+          gsap.from(icon, {
+            scale: 0,
+            rotation: 180,
+            duration: 1,
+            ease: "back.out(1.7)",
+            delay: index * 0.2,
+            scrollTrigger: {
+              trigger: icon,
+              start: "top 80%",
+              toggleActions: "play none none reverse"
+            }
+          });
+
+          // Continuous floating animation
+          gsap.to(icon, {
+            y: "random(-15, 15)",
+            rotation: "random(-10, 10)",
+            duration: "random(3, 5)",
+            repeat: -1,
+            yoyo: true,
+            ease: "power2.inOut",
+            delay: index * 0.5
+          });
+        }
+      });
+
+      // Parallax effect for cards
+      cardsRef.current.forEach((card) => {
+        if (card) {
+          gsap.to(card, {
+            y: -30,
+            scrollTrigger: {
+              trigger: card,
+              start: "top bottom",
+              end: "bottom top",
+              scrub: 1
+            }
+          });
+        }
+      });
+
+    }, containerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <div className="min-h-screen bg-gray-50 py-16 px-4">
+    <div ref={containerRef} className="min-h-screen bg-gray-50 py-16 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header Section */}
-        <div className="text-center mb-16">
+        <div ref={headerRef} className="text-center mb-16">
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6">
             Automate Workflow,<br />Customize Everything.
           </h1>
@@ -23,7 +112,7 @@ export default function WorkflowHero() {
         {/* Cards Section */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
           {/* Visual Task Editor Card */}
-          <div className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl p-8 shadow-lg">
+          <div ref={el => cardsRef.current[0] = el} className="bg-gradient-to-br from-gray-100 to-gray-200 rounded-3xl p-8 shadow-lg">
             <h2 className="text-3xl font-bold text-gray-900 mb-3">Visual Task Editor</h2>
             <p className="text-gray-600 mb-8">
               Drag, drop, and edit your task layout<br />
@@ -106,45 +195,45 @@ export default function WorkflowHero() {
           </div>
 
           {/* Workflow Automation Card */}
-          <div className="bg-gradient-to-br from-purple-900 via-purple-800 to-orange-900 rounded-3xl p-8 shadow-xl relative overflow-hidden">
+          <div ref={el => cardsRef.current[1] = el} className="bg-gradient-to-br from-purple-900 via-purple-800 to-orange-900 rounded-3xl p-8 shadow-xl relative overflow-hidden">
             <h2 className="text-3xl font-bold text-white mb-3">Workflow Automation</h2>
             <p className="text-gray-200 mb-12">
               Drag, drop, and edit your task layout<br />
               in real time — no code or clutter.
             </p>
 
-            {/* Floating Icons */}
+            {/* Floating Icons with refs */}
             <div className="relative h-64">
               {/* Purple Icon - Top Left */}
-              <div className="absolute top-8 left-12 w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center shadow-2xl transform -rotate-12 animate-float">
+              <div ref={el => floatingIconsRef.current[0] = el} className="absolute top-8 left-12 w-16 h-16 bg-purple-600 rounded-2xl flex items-center justify-center shadow-2xl transform -rotate-12">
                 <div className="text-white text-2xl">*</div>
               </div>
 
               {/* Blue Icon - Left */}
-              <div className="absolute top-28 left-4 w-20 h-20 bg-blue-600 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-6" style={{animationDelay: '0.5s'}}>
+              <div ref={el => floatingIconsRef.current[1] = el} className="absolute top-28 left-4 w-20 h-20 bg-blue-600 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-6">
                 <Zap className="w-10 h-10 text-white" fill="white" />
               </div>
 
               {/* Center Logo */}
               <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 flex items-center gap-3">
-                <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-2xl transform rotate-45">
+                <div ref={el => floatingIconsRef.current[2] = el} className="w-16 h-16 bg-gradient-to-br from-orange-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-2xl transform rotate-45">
                   <Zap className="w-10 h-10 text-white transform -rotate-45" fill="white" />
                 </div>
                 <div className="text-4xl font-bold text-white">Zentree.</div>
               </div>
 
               {/* Red Icon - Top Right */}
-              <div className="absolute top-4 right-8 w-20 h-20 bg-gradient-to-br from-red-500 to-pink-500 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-45" style={{animationDelay: '0.2s'}}>
+              <div ref={el => floatingIconsRef.current[3] = el} className="absolute top-4 right-8 w-20 h-20 bg-gradient-to-br from-red-500 to-pink-500 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-45">
                 <div className="w-10 h-10 bg-white rounded-xl transform -rotate-45"></div>
               </div>
 
               {/* Orange Icon - Bottom */}
-              <div className="absolute bottom-8 left-1/3 w-20 h-20 bg-orange-500 rounded-3xl flex items-center justify-center shadow-2xl transform -rotate-6" style={{animationDelay: '0.8s'}}>
+              <div ref={el => floatingIconsRef.current[4] = el} className="absolute bottom-8 left-1/3 w-20 h-20 bg-orange-500 rounded-3xl flex items-center justify-center shadow-2xl transform -rotate-6">
                 <div className="w-0 h-0 border-t-8 border-t-transparent border-l-12 border-l-white border-b-8 border-b-transparent"></div>
               </div>
 
               {/* Yellow Icon - Bottom Right */}
-              <div className="absolute bottom-12 right-12 w-20 h-20 bg-yellow-400 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-12" style={{animationDelay: '0.3s'}}>
+              <div ref={el => floatingIconsRef.current[5] = el} className="absolute bottom-12 right-12 w-20 h-20 bg-yellow-400 rounded-3xl flex items-center justify-center shadow-2xl transform rotate-12">
                 <div className="w-10 h-10 bg-black rounded-full flex items-center justify-center">
                   <div className="w-5 h-5 bg-yellow-400 rounded-full"></div>
                 </div>
@@ -153,20 +242,6 @@ export default function WorkflowHero() {
           </div>
         </div>
       </div>
-
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% {
-            transform: translateY(0) rotate(-12deg);
-          }
-          50% {
-            transform: translateY(-10px) rotate(-12deg);
-          }
-        }
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-      `}</style>
     </div>
   );
 }
