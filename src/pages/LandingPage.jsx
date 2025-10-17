@@ -6,39 +6,7 @@ export default function LandingPage() {
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-purple-100 to-blue-200 py-20 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-700 mb-8">
-            Transforming the Remote Working
-          </h1>
-          
-          {/* Logo Strip */}
-          <div className="flex flex-wrap justify-center items-center gap-8 text-gray-600">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-gray-400 rounded"></div>
-              <span className="font-semibold">Logoipsum</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Star className="w-6 h-6" fill="currentColor" />
-              <span className="font-semibold">stari</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-gray-400 rounded-full"></div>
-              <span className="font-semibold">goldline</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-gray-400 rounded"></div>
-              <span className="font-semibold">Logoipsum</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Users className="w-6 h-6" />
-              <span className="font-semibold">treva.</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 bg-gray-400 rounded-full"></div>
-              <span className="font-semibold">ve</span>
-            </div>
-          </div>
-        </div>
+    
 
         {/* Features Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">

@@ -3,50 +3,50 @@ import { Check, ArrowRight, Play } from 'lucide-react';
 
 export default function HeroSection() {
   return (
-    <div className="min-h-screen bg-white relative overflow-hidden flex items-center justify-center">
-      {/* Decorative dots */}
-      <div className="absolute top-24 left-48 w-3 h-3 bg-lime-400 rounded-full"></div>
-      <div className="absolute top-80 left-48 w-3 h-3 bg-lime-400 rounded-full"></div>
-      <div className="absolute top-96 right-64 w-3 h-3 bg-orange-300 rounded-full"></div>
-      <div className="absolute top-96 right-48 w-3 h-3 bg-pink-300 rounded-full"></div>
+    <div className="h-[80vh] bg-white relative overflow-hidden flex items-center justify-center">
+      {/* Decorative dots - adjusted to be more responsive */}
+      <div className="absolute top-20 left-1/6 w-3 h-3 bg-lime-400 rounded-full"></div>
+      <div className="absolute top-40 left-1/5 w-3 h-3 bg-lime-400 rounded-full"></div>
+      <div className="absolute top-96 right-1/4 w-3 h-3 bg-orange-300 rounded-full"></div>
+      <div className="absolute top-96 right-1/6 w-3 h-3 bg-pink-300 rounded-full"></div>
       <div className="absolute top-1/2 right-32 w-3 h-3 bg-blue-300 rounded-full"></div>
-      <div className="absolute bottom-32 right-12 w-4 h-4 bg-green-400 rounded-full"></div>
+      <div className="absolute bottom-20 right-12 w-4 h-4 bg-green-400 rounded-full"></div>
 
       {/* Main Content */}
-      <div className="max-w-6xl mx-auto px-6 w-full">
-        {/* Feature Tags */}
-        <div className="flex items-center justify-center gap-8 mb-12">
+      <div className="max-w-6xl mx-auto px-6 w-full flex flex-col items-center text-center transform -translate-y-8">
+        {/* Feature Tags - allow wrapping and center alignment */}
+        <div className="flex items-center justify-center gap-6 mb-8 flex-wrap">
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
               <Check className="w-4 h-4 text-blue-600" strokeWidth={3} />
             </div>
-            <span className="text-gray-900 font-medium">Huge Template Library</span>
+            <span className="text-gray-900 font-medium text-sm">Huge Template Library</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
               <Check className="w-4 h-4 text-blue-600" strokeWidth={3} />
             </div>
-            <span className="text-gray-900 font-medium">Live Customizer</span>
+            <span className="text-gray-900 font-medium text-sm">Live Customizer</span>
           </div>
           <div className="flex items-center gap-2">
             <div className="w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
               <Check className="w-4 h-4 text-blue-600" strokeWidth={3} />
             </div>
-            <span className="text-gray-900 font-medium">24/7× Live Support</span>
+            <span className="text-gray-900 font-medium text-sm">24/7× Live Support</span>
           </div>
         </div>
 
-        {/* Hero Heading */}
-        <div className="text-center mb-8 relative">
-          <div className="absolute top-0 right-1/4 bg-yellow-300 text-gray-900 px-4 py-1 rounded-full text-sm font-medium transform translate-x-20 shadow-sm">
+        {/* Hero Heading - responsive sizes and relative badges */}
+        <div className="mb-8 relative w-full max-w-4xl">
+          {/* badges positioned relative to heading so they flow on small screens */}
+          <div className="absolute -top-4 left-4 bg-yellow-300 text-gray-900 px-3 py-1 rounded-full text-xs font-medium shadow-sm hidden sm:inline-block">
             eComm manager
           </div>
-          <div className="absolute top-32 left-1/4 bg-green-300 text-gray-900 px-4 py-1 rounded-full text-sm font-medium transform -translate-x-20 shadow-sm">
+          <div className="absolute -top-4 right-4 bg-green-300 text-gray-900 px-3 py-1 rounded-full text-xs font-medium shadow-sm hidden sm:inline-block">
             Head of Payments
           </div>
-          <div className="absolute top-2 left-1/3 w-2 h-2 bg-lime-400 rounded-full"></div>
-          
-          <h1 className="text-7xl font-black leading-tight">
+
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-black leading-tight">
             <div className="text-black mb-2">Manage Your Work.</div>
             <div className="relative inline-block">
               <span className="bg-gradient-to-r from-blue-500 via-purple-500 via-pink-500 to-orange-400 bg-clip-text text-transparent">
@@ -68,18 +68,18 @@ export default function HeroSection() {
         </div>
 
         {/* Subheading */}
-        <p className="text-center text-gray-600 text-lg mb-10 max-w-xl mx-auto leading-relaxed">
-          No messy code. No cluttered design. Just an<br />
+        <p className="text-gray-600 text-base sm:text-lg mb-10 max-w-xl leading-relaxed">
+          No messy code. No cluttered design. Just an<br className="hidden sm:inline" />
           easy, effective way to stay on top of your tasks.
         </p>
 
-        {/* CTA Buttons */}
-        <div className="flex items-center justify-center gap-4 mb-16">
+        {/* CTA Buttons - stack on small screens */}
+        <div className="flex items-center justify-center gap-4 mb-16 flex-col sm:flex-row w-full">
           <button className="bg-blue-600 text-white px-8 py-4 rounded-full font-semibold flex items-center gap-2 hover:bg-blue-700 transition-colors shadow-lg">
             Sign Up Free <ArrowRight className="w-5 h-5" />
           </button>
-          <button className="bg-white text-blue-600 border-2 border-blue-600 px-8 py-4 rounded-full font-semibold flex items-center gap-2 hover:bg-blue-50 transition-colors">
-            <Play className="w-5 h-5 fill-blue-600" /> Watch Demo
+          <button className="bg-white text-blue-600 border-2 border-blue-600 px-8 py-4 rounded-full font-semibold flex items-center gap-2 hover:bg-blue-50 transition-colors mt-3 sm:mt-0">
+            <Play className="w-5 h-5" strokeWidth={2} /> <span>Watch Demo</span>
           </button>
         </div>
       </div>

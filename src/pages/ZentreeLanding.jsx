@@ -16,8 +16,8 @@ export default function ZentreeLanding() {
       </section>
 
       {/* AI Everything Section */}
-      <section className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <section className="max-w-5xl mx-auto px-6 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
           {/* Left Content */}
           <div>
             <h2 className="text-5xl font-bold text-gray-900 mb-4">
@@ -91,8 +91,8 @@ export default function ZentreeLanding() {
       </section>
 
       {/* Unified Search Section */}
-      <section className="max-w-7xl mx-auto px-6 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+      <section className="max-w-5xl mx-auto px-6 py-16">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           {/* Left Visual */}
           <div className="relative order-2 lg:order-1">
             <div className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-3xl p-8 shadow-xl relative overflow-hidden min-h-96">
